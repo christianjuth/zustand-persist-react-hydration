@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
 ## Getting Started
 
 First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How store works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+> Note: The store is persisted to a cookie that is setup so to be read/write on the client side, and read on the server.
 
-## Learn More
+When you visit [http://localhost:3000](http://localhost:3000), the following happens:
 
-To learn more about Next.js, take a look at the following resources:
+* RSC reads your the persisted value of your store, via the cookie, and passes the value into a client component.
+  * See `src/app/layout.tsx`
+* Before any zustand hooks are called, we manually hydrate the store with the value passed in from the server.
+  * See `src/store/preferences/hydrate-preferences-store.tsx`
+* Instead of the default zustand hook, we create our own hook for accessing the store since zustand's default hook doesn't seem to respect the manually hyrated value
+  * See `src/store/preferences/hooks.tsx`
+  * Note: this hook doesn't not implement the ability to subscribe to a slice of the store yet
+* User can now interact with the `SelectSort` component which mutates the store
+  * Test it at [http://localhost:3000](http://localhost:3000)
+  * See `src/components/sort-selector.tsx`
+* Changes to the sort preference automatically update the `DemoList` component
+  * See `src/components/demo-list.tsx`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**All of this happens in a way where if you refresh the page, the initial render pre next.js hydration has the already hydrated zustand store.**
