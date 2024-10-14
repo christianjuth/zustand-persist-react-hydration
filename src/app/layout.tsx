@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { getPreferencesCookie } from '@/store/preferences/getStore.server';
+import { HydratePreferencesStore } from '@/store/preferences/hydrate-preferences-store';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -23,12 +25,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const preferencesCookie = getPreferencesCookie();
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <HydratePreferencesStore preferences={preferencesCookie}>
+          {children}
+        </HydratePreferencesStore>
       </body>
     </html>
   );
