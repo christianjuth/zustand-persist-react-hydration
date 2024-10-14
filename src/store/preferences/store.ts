@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { createStore } from 'zustand/vanilla';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { getCookie, setCookie, removeCookie } from 'typescript-cookie';
 import * as config from './config';
@@ -9,10 +9,10 @@ const storage = createJSONStorage<config.Store>(() => ({
   removeItem: (name) => removeCookie(name),
 }));
 
-export const store = create(
+export const store = createStore(
   persist<config.Store>(
     (set, get) => ({
-      sort: 'desc',
+      sort: 'asc',
       setSort: (sort) => set({ sort }),
     }), 
     {
