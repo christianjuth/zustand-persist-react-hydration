@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div className="max-w-md p-6 mx-auto">
       <SortSelector />
-      <DemoList sort="asc" />
+      <DemoList />
     </div>
   );
 }
