@@ -12,6 +12,7 @@ export function SortSelector() {
     <select 
       value={sort} 
       onChange={e => setSort(e.target.value as any)}
+      className="border p-2"
     >
       <option value="asc">Ascending</option>
       <option value="desc">Descending</option>

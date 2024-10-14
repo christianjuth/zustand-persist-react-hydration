@@ -16,7 +16,7 @@ export function DemoList() {
   const sorted = sort === 'asc' ? LIST : LIST.toReversed();
 
   return (
-    <ul>
+    <ul className="divide-y">
       {sorted.map(item => (
         <li key={item.id}>{item.name}</li>
       ))}
